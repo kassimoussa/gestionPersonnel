@@ -69,6 +69,40 @@ rechargement à chaud.
 
 Le service `scheduler` du `docker-compose.yml` exécute les tâches planifiées.
 
+### Importer les données existantes
+
+Pour repartir d'une sauvegarde (base et pièces jointes) plutôt que d'une base vide, après
+l'installation ci-dessus. Les deux fichiers sont ignorés par git (`*.sql`, `*.tar.gz`) : ils
+contiennent des données du personnel et ne doivent jamais être ajoutés au dépôt.
+
+1. Placer `donnees.sql` (dump MySQL) et `fichiers.tar.gz` (dossier `storage/app/`) à la racine du
+   projet, conteneurs démarrés (`docker compose up -d`).
+2. Importer la base. Le dump supprime et recrée toutes les tables : les données actuelles, dont
+   le compte de test du `--seed`, sont **remplacées**.
+
+   ```bash
+   docker compose exec -T mysql mysql -uroot -proot gestion_personnel < donnees.sql
+   ```
+
+3. Extraire les fichiers (photos, pièces des dossiers, justificatifs d'absence, formulaires de
+   congé). L'archive contient des chemins `storage/app/...` et doit s'extraire depuis la racine du
+   projet. `--exclude` conserve les `.gitignore` du dépôt.
+
+   ```bash
+   tar -xzf fichiers.tar.gz --exclude='.gitignore'
+   ```
+
+4. Appliquer les migrations éventuellement postérieures à la sauvegarde. La table `migrations` est
+   importée avec le dump, seules les nouvelles sont exécutées.
+
+   ```bash
+   docker compose exec app php artisan migrate
+   ```
+
+Les comptes et mots de passe sont ceux de la sauvegarde : le compte `test@example.com` n'existe
+plus. Pour donner les droits d'administration à un compte importé :
+`docker compose exec app php artisan roles:assigner-admin email@exemple.com`.
+
 ## Tests
 
 ```bash
