@@ -1,58 +1,144 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Gestion du personnel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Application web de gestion des ressources humaines développée pour l'ANEFIP (Djibouti). Elle
+centralise les dossiers du personnel, les contrats, les congés, la présence (pointeuse) et la
+paie, avec un organigramme et des droits d'accès attribués compte par compte.
 
-## About Laravel
+C'est un outil de **gestion du personnel**, pas un portail employé : les comptes sont réservés au
+service du personnel, à la direction et à l'administrateur. La plupart des employés n'ont pas de
+compte et sont gérés par le service du personnel.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+> **Paie** : les bulletins ne doivent pas servir à un vrai versement de salaire tant qu'un
+> comptable n'a pas confirmé les taux et un point ouvert sur l'IRPP. Voir
+> [docs/points-a-verifier-paie.md](docs/points-a-verifier-paie.md).
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Fonctionnalités
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Tableau de bord** : indicateurs en lecture seule, adaptés à la fonction de l'utilisateur.
+- **Personnel** : fiche employé (état civil, coordonnées, photo), données sensibles protégées
+  (pièce d'identité, CNSS, banque), dossier de pièces (contrat, diplôme, CV, certificat médical…)
+  et historique disciplinaire et de carrière (avertissement, mise à pied, promotion, mutation,
+  formation…).
+- **Structure** : départements hiérarchiques (Direction, Division, Département, Service) avec
+  responsable, et organigramme exportable en PDF.
+- **Contrats** : CDI, CDD, stage, consultant, avec le salaire de base qui alimente la paie.
+- **Congés** : congé annuel, maladie, sans solde, événement familial. Le circuit suit le
+  document papier de l'agence : formulaire remis à l'employé, visa du chef, attestation et
+  récapitulatif, signature du directeur général qui acte le congé. Les pièces signées sont
+  conservées avec la demande. Les jours s'acquièrent chaque mois (2,5 jours, soit 30 par an), se
+  décomptent en jours ouvrés (hors weekend et jours fériés) et se reportent d'une année sur l'autre.
+- **Présence** : import des événements de la pointeuse (CSV) et de son annuaire (xlsx), saisie
+  manuelle (qui prévaut sur l'import), rapport d'assiduité (présent, retard, absence, congé, mise
+  à pied…), justificatifs d'absence avec pièce jointe et décision, calendrier des jours fériés.
+- **Paie** : génération mensuelle de brouillons d'après le contrat, ajustements, validation,
+  historique et bulletins PDF. Cotisations CNSS (parts salariale et patronale) et IRPP au barème
+  progressif de Djibouti. Préparer et valider la paie sont deux droits distincts.
+- **Comptes et droits** : l'administrateur attribue des droits (ou des profils pré-remplis) ;
+  les positions de directeur général et de manager découlent de l'organigramme. Voir
+  [docs/roles-et-droits.md](docs/roles-et-droits.md).
+- **Paramètres** : nom, logo et couleurs de l'application, textes de la page de connexion,
+  coordonnées et en-tête des documents, signataire, Direction générale, temps de travail
+  (weekend, heure de début, tolérance de retard, jours de congé par mois) et ouverture de
+  l'inscription publique (fermée par défaut).
 
-## Learning Laravel
+## Technologies
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Laravel 13 et PHP 8.3, Livewire 3 avec Volt, Tailwind CSS et Vite, MySQL 8, authentification
+Laravel Breeze, [spatie/laravel-permission](https://spatie.be/docs/laravel-permission) pour les
+rôles et droits, [laravel-dompdf](https://github.com/barryvdh/laravel-dompdf) pour les PDF.
+Tests avec PHPUnit.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Installation en développement
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Prérequis : Docker et Node.js (le build des assets se fait hors du conteneur).
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+cp .env.example .env
+docker compose up -d --build
+docker compose exec app composer install
+docker compose exec app php artisan key:generate
+docker compose exec app php artisan migrate --seed
+docker compose exec app php artisan roles:assigner-admin test@example.com
+npm install && npm run build
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+L'application répond sur <http://localhost:8000>. Le `--seed` crée un compte de test
+(`test@example.com`, mot de passe `password`) : **réservé au développement**, il devient
+administrateur avec la dernière commande. Pendant le développement, `npm run dev` lance Vite avec
+rechargement à chaud.
 
-## Contributing
+Le service `scheduler` du `docker-compose.yml` exécute les tâches planifiées.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Tests
 
-## Code of Conduct
+```bash
+docker compose exec app php artisan test
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Les tests utilisent SQLite en mémoire (voir `phpunit.xml`) et ne touchent pas à la base MySQL.
 
-## Security Vulnerabilities
+## Commandes artisan
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+| Commande | Rôle |
+| --- | --- |
+| `conges:accumuler-soldes` | Crédite les jours de congé du mois à chaque employé actif. Planifiée le 1er de chaque mois, sans doublon. |
+| `conges:regulariser-soldes` | Complète les soldes manquants jusqu'au mois en cours. |
+| `pointeuse:importer-annuaire fichier.xlsx` | Crée les fiches employés depuis l'annuaire de la pointeuse (`--simulation` pour tester). |
+| `roles:assigner-admin email` | Attribue le rôle administrateur à un compte existant. |
 
-## License
+## Configuration métier
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- [config/personnel.php](config/personnel.php) : valeurs par défaut du temps de travail (weekend
+  vendredi et samedi, début à 08:00, tolérance de 15 minutes, 2,5 jours de congé par mois). Les
+  réglages faits dans l'écran *Paramètres* priment.
+- [config/paie.php](config/paie.php) : taux CNSS et tranches de l'IRPP, jamais écrits en dur dans
+  le code. Corriger ce fichier suffit quand la réglementation change.
+
+## Mise en production
+
+Une configuration Docker de production est fournie : PHP-FPM, nginx, MySQL, le scheduler et Caddy,
+qui gère le HTTPS (certificat Let's Encrypt automatique, ou certificat local pour un réseau
+interne). Au démarrage, les migrations sont appliquées.
+
+```bash
+cp .env.production.example .env.production
+# renseigner APP_KEY, APP_URL, APP_DOMAIN, APP_TLS, DB_PASSWORD, DB_ROOT_PASSWORD et MAIL_*
+docker compose -f docker-compose.prod.yml --env-file .env.production up -d --build
+```
+
+Première mise en service : les rôles, puis le premier compte administrateur. L'inscription publique
+est fermée, le compte se crée donc en ligne de commande.
+
+```bash
+dc="docker compose -f docker-compose.prod.yml --env-file .env.production"
+$dc exec -u www-data app php artisan db:seed --class=RoleSeeder --force
+$dc exec -u www-data app php artisan db:seed --class=ParametresApplicationSeeder --force
+$dc exec -u www-data -e HOME=/tmp app php artisan tinker --execute 'App\Models\User::create(["name" => "Administrateur", "email" => "admin@exemple.com", "password" => "mot-de-passe-fort"]);'
+$dc exec -u www-data app php artisan roles:assigner-admin admin@exemple.com
+```
+
+Ne lancez pas `db:seed` sans `--class` en production : il créerait le compte de test.
+Les données vivent dans les volumes Docker `mysql-data` (base) et `storage-data` (photos,
+justificatifs, documents) : à sauvegarder régulièrement. Mise à jour : récupérer le nouveau code
+(`git pull`), puis relancer la commande `up -d --build`.
+
+## Documentation
+
+- [docs/roles-et-droits.md](docs/roles-et-droits.md) : catalogue des droits, positions déduites de
+  l'organigramme, circuit des congés, où chaque règle est appliquée dans le code.
+- [docs/format-import-pointages.md](docs/format-import-pointages.md) : formats des fichiers de la
+  pointeuse (CSV des pointages, xlsx de l'annuaire) et règles de traitement.
+- [docs/points-a-verifier-paie.md](docs/points-a-verifier-paie.md) : sources des taux, point
+  ouvert sur l'article 14 du CGI et hypothèses du calcul de paie.
+
+## Organisation du code
+
+| Dossier | Contenu |
+| --- | --- |
+| `app/Livewire/` | Écrans de l'application, un composant par page |
+| `app/Services/` | Logique métier : calcul de paie, jours ouvrés, période de congé, import des pointages, organigramme |
+| `app/Enums/` | Droits, profils, statuts et types (congé, présence, paie, contrat…) |
+| `app/Policies/` | Règles d'accès par ressource |
+| `app/Http/Controllers/` | Génération des PDF et téléchargement des pièces |
+| `app/Console/Commands/` | Commandes artisan listées plus haut |
+| `docker/` | Dockerfiles et configurations nginx, PHP et Caddy |
