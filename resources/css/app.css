@@ -1,0 +1,207 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Système de design ANEFIP.
+ * Neutres clairs, une police sans empattement (Inter), cartes à coins arrondis et ombre légère,
+ * statuts en pastilles, accent bleu ANEFIP (surchargé à l'exécution par partials/variables-theme.blade.php)
+ * et violet ANEFIP en second ton.
+ */
+:root {
+    --color-ink: #101828;
+    --color-bg: #F9FAFB;
+    --color-surface: #FFFFFF;
+    --color-border: #EAECF0;
+    --color-border-strong: #D0D5DD;
+    --color-text-secondary: #475467;
+    --color-text-tertiary: #667085;
+    --color-accent: #1C3C8F;
+    --color-accent-light: #3255B1;
+    --color-accent-soft: #E8ECF4;
+    --color-accent-2: #6B3F9E;
+    --color-accent-2-doux: #F4F0FA;
+    --color-succes: #067647;
+    --color-succes-doux: #ECFDF3;
+    --color-succes-bord: #ABEFC6;
+    --color-attention: #B54708;
+    --color-attention-doux: #FFFAEB;
+    --color-attention-bord: #FEDF89;
+    --color-danger: #B42318;
+    --color-danger-doux: #FEF3F2;
+    --color-danger-bord: #FECDCA;
+    --color-info: #175CD3;
+    --color-info-doux: #EFF8FF;
+    --color-info-bord: #B2DDFF;
+    --color-division: #6941C6;
+    --color-division-doux: #F9F5FF;
+    --color-division-bord: #E9D7FE;
+    --color-service: #107569;
+    --color-service-doux: #F0FDF9;
+    --color-service-bord: #99F6E0;
+}
+
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body { background-color: var(--color-bg); color: var(--color-ink); font-feature-settings: 'cv11'; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+/* Boutons et liens d'action */
+.bouton-principal { @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg border border-accent bg-accent px-3.5 py-2 text-sm font-semibold text-white shadow-xs transition hover:border-accent-light hover:bg-accent-light disabled:cursor-not-allowed disabled:opacity-50; }
+.bouton-secondaire { @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg border border-bordure-forte bg-white px-3.5 py-2 text-sm font-semibold text-secondaire shadow-xs transition hover:bg-fond hover:text-ink disabled:cursor-not-allowed disabled:opacity-50; }
+.bouton-danger { @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg border border-danger bg-danger px-3.5 py-2 text-sm font-semibold text-white shadow-xs transition hover:opacity-90; }
+.bouton-icone { @apply inline-flex h-9 w-9 items-center justify-center rounded-lg text-tertiaire transition hover:bg-fond hover:text-ink; }
+.bouton-icone svg { @apply h-[18px] w-[18px]; }
+.bouton-icone:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 1px; }
+.bouton-icone-accent:hover { color: var(--color-accent); background-color: var(--color-accent-soft); }
+.bouton-icone-danger:hover { color: var(--color-danger); background-color: var(--color-danger-doux); }
+.bouton-icone-succes:hover { color: var(--color-succes); background-color: var(--color-succes-doux); }
+/* Colonne d'actions : les icônes se serrent sans espace superflu */
+.tableau .actions-icones { @apply flex items-center justify-end gap-0.5; }
+
+/* Suggestions du champ de recherche d'employé */
+.liste-suggestions { @apply mt-1 max-h-64 divide-y divide-bordure overflow-y-auto rounded-lg border border-bordure bg-white shadow-sm; }
+.suggestion { @apply flex w-full items-center gap-3 px-3 py-2 text-left transition hover:bg-fond; }
+.suggestion:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+.bouton-lien { @apply text-sm font-semibold text-secondaire transition hover:text-ink; }
+.bouton-lien-danger { @apply text-sm font-semibold text-danger transition hover:opacity-80; }
+.bouton-lien-principal { @apply text-sm font-semibold text-accent transition hover:text-accent-light; }
+
+/* Formulaires */
+.etiquette { @apply mb-1.5 block text-sm font-medium text-secondaire; }
+.champ { @apply block w-full rounded-lg border-bordure-forte bg-white px-3 py-2 text-sm text-ink shadow-xs placeholder:text-tertiaire disabled:cursor-not-allowed disabled:bg-fond disabled:text-tertiaire; }
+.champ:focus { border-color: var(--color-accent); outline: none; --tw-ring-color: transparent; box-shadow: 0 0 0 4px var(--color-accent-soft); }
+.case { @apply h-4 w-4 rounded border-bordure-forte text-accent shadow-none; }
+.case:focus { --tw-ring-color: var(--color-accent-soft); }
+.erreur { @apply mt-1.5 text-sm text-danger; }
+.aide { @apply mt-1.5 text-sm text-tertiaire; }
+
+/* Cartes, indicateurs et messages */
+.panneau { @apply rounded-xl border border-bordure bg-white p-5 shadow-xs sm:p-6; }
+.panneau-titre { @apply text-base font-semibold text-ink; }
+.panneau-sous-titre { @apply mt-1 text-sm text-tertiaire; }
+.indicateur { @apply rounded-xl border border-bordure bg-white p-5 shadow-xs; }
+.indicateur-libelle { @apply text-sm font-medium text-tertiaire; }
+.indicateur-valeur { @apply mt-2 text-2xl font-semibold tracking-tight text-ink; }
+.icone-mise-en-avant { @apply inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-bordure bg-white text-secondaire shadow-xs; }
+.message-info { @apply rounded-lg border border-bordure bg-white px-4 py-3 text-sm text-secondaire shadow-xs; }
+.message-succes { @apply rounded-lg border border-succes-bord bg-succes-doux px-4 py-3 text-sm text-succes; }
+.message-attention { @apply rounded-lg border border-attention-bord bg-attention-doux px-4 py-3 text-sm text-attention; }
+.message-erreur { @apply rounded-lg border border-danger-bord bg-danger-doux px-4 py-3 text-sm text-danger; }
+
+/* Tableaux */
+.tableau-conteneur { @apply overflow-x-auto rounded-xl border border-bordure bg-white shadow-xs; }
+.tableau { @apply w-full border-collapse text-sm; }
+.tableau thead th { @apply whitespace-nowrap border-b border-bordure bg-fond px-4 py-3 text-left text-xs font-medium text-tertiaire; }
+.tableau tbody td { @apply border-b border-bordure px-4 py-3.5 align-middle text-secondaire; }
+.tableau tbody tr:last-child td { border-bottom: 0; }
+.tableau tbody tr:hover td { background-color: var(--color-bg); }
+.tableau tbody td[class~="font-medium"] { color: var(--color-ink); }
+.tableau .montant { @apply whitespace-nowrap text-right tabular-nums; }
+.tableau .secondaire { color: var(--color-text-tertiary); }
+.tableau .actions { @apply whitespace-nowrap text-right; }
+.tableau .vide { @apply px-4 py-12 text-center text-sm text-tertiaire; }
+.tableau .sous-ligne { @apply mt-0.5 block text-xs font-normal text-tertiaire; }
+/* En-tête de colonne triable : la flèche reste discrète tant que la colonne n'est pas active */
+.tableau thead th:has(.entete-tri) { @apply p-0; }
+.entete-tri { @apply flex w-full items-center gap-1.5 px-4 py-3 text-left text-xs font-medium text-tertiaire transition; }
+.entete-tri:hover { color: var(--color-ink); background-color: var(--color-surface); }
+.entete-tri:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+.entete-tri svg { @apply h-3.5 w-3.5 shrink-0 opacity-0 transition; }
+.entete-tri:hover svg { opacity: 0.5; }
+.entete-tri.est-actif { color: var(--color-ink); }
+.entete-tri.est-actif svg { opacity: 1; color: var(--color-accent); }
+.tableau thead th.montant .entete-tri { @apply justify-end; }
+.tableau thead th.actions .entete-tri { @apply justify-end; }
+.identite { @apply flex min-w-0 items-center gap-3; }
+.identite-nom { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; color: var(--color-ink); }
+
+/* Pastilles de statut : un seul système pour toute l'application */
+.badge { @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2 py-0.5 text-xs font-medium; }
+.badge-point::before { content: ''; height: 6px; width: 6px; flex-shrink: 0; border-radius: 9999px; background-color: currentColor; }
+.badge-neutre { border-color: var(--color-border); background-color: var(--color-bg); color: #344054; }
+.badge-succes { border-color: var(--color-succes-bord); background-color: var(--color-succes-doux); color: var(--color-succes); }
+.badge-attention { border-color: var(--color-attention-bord); background-color: var(--color-attention-doux); color: var(--color-attention); }
+.badge-danger { border-color: var(--color-danger-bord); background-color: var(--color-danger-doux); color: var(--color-danger); }
+.badge-info { border-color: var(--color-info-bord); background-color: var(--color-info-doux); color: var(--color-info); }
+.badge-accent, .badge-direction { border-color: var(--color-accent-soft); background-color: var(--color-accent-soft); color: var(--color-accent); }
+.badge-departement { border-color: var(--color-info-bord); background-color: var(--color-info-doux); color: var(--color-info); }
+.badge-division { border-color: var(--color-division-bord); background-color: var(--color-division-doux); color: var(--color-division); }
+.badge-service { border-color: var(--color-service-bord); background-color: var(--color-service-doux); color: var(--color-service); }
+.badge-pointille { border: 1px dashed var(--color-border-strong); background-color: var(--color-surface); color: var(--color-text-tertiary); }
+.badge-vide { border-color: transparent; background-color: transparent; color: var(--color-border-strong); }
+
+/* Cellules du rapport de présence (mêmes couleurs que les pastilles, format carré) */
+.cellule-presence { @apply inline-flex h-7 w-7 items-center justify-center rounded-md border text-xs font-semibold; }
+
+/* Navigation latérale */
+.lien-sidebar { @apply flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold text-secondaire transition hover:bg-fond hover:text-ink; }
+.lien-sidebar svg { color: #98A2B3; }
+.lien-sidebar:hover svg { color: var(--color-text-secondary); }
+.lien-sidebar-actif, .lien-sidebar-actif:hover { background-color: var(--color-accent-soft); color: var(--color-accent); }
+.lien-sidebar-actif svg, .lien-sidebar-actif:hover svg { color: var(--color-accent); }
+.titre-sidebar { @apply px-3 pb-1.5 pt-5 text-xs font-medium text-tertiaire; }
+
+/*
+ * Fenêtres de formulaire plein écran. Le contenu est centré sur la largeur --largeur-modale
+ * (définie par <x-modale largeur="...">) : l'en-tête, le corps et le pied restent alignés.
+ */
+.modale-plein-ecran { display: flex; flex-direction: column; background-color: var(--color-bg); animation: modale-entree 180ms ease-out; }
+.modale-plein-ecran > form { display: flex; min-height: 0; flex: 1 1 auto; flex-direction: column; }
+.modale-aligne { padding-inline: max(1rem, calc((100% - var(--largeur-modale, 56rem)) / 2)); }
+.modale-entete { flex-shrink: 0; border-bottom: 1px solid var(--color-border); background-color: var(--color-surface); padding-block: 1.25rem; }
+.modale-corps { flex: 1 1 auto; overflow-y: auto; padding-block: 2rem 3rem; padding-inline: max(1rem, calc((100% - var(--largeur-modale, 56rem)) / 2)); }
+.modale-pied { display: flex; flex-shrink: 0; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem; border-top: 1px solid var(--color-border); background-color: var(--color-surface); padding-block: 1rem; padding-inline: max(1rem, calc((100% - var(--largeur-modale, 56rem)) / 2)); }
+.modale-pied-actions { @apply ms-auto flex flex-wrap items-center gap-3; }
+@keyframes modale-entree { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .modale-plein-ecran { animation: none; } }
+
+/* Sections de formulaire : titre et description à gauche, champs dans une carte à droite */
+.section-formulaire { @apply grid grid-cols-1 gap-x-10 gap-y-4 border-b border-bordure py-8 first:pt-0 last:border-b-0 last:pb-0 lg:grid-cols-3; }
+.section-formulaire-titre { @apply text-base font-semibold text-ink; }
+.section-formulaire-description { @apply mt-1 text-sm text-tertiaire; }
+.section-formulaire-champs { @apply grid grid-cols-1 gap-x-5 gap-y-5 rounded-xl border border-bordure bg-white p-5 shadow-xs sm:grid-cols-6 sm:p-6 lg:col-span-2; }
+
+/* Champ avec icône à gauche ou unité à droite */
+.champ-icone { position: relative; }
+.champ-icone > svg { position: absolute; inset-inline-start: 0.75rem; top: 50%; height: 1.125rem; width: 1.125rem; transform: translateY(-50%); color: #98A2B3; pointer-events: none; }
+.champ-icone > .champ { padding-inline-start: 2.5rem; }
+.champ-unite { position: relative; }
+.champ-unite > .champ { padding-inline-end: 3.25rem; }
+.champ-unite > span { position: absolute; inset-inline-end: 0.75rem; top: 50%; transform: translateY(-50%); font-size: 0.875rem; color: var(--color-text-tertiary); pointer-events: none; }
+
+/* Cartes de choix (boutons radio) */
+.choix { @apply flex cursor-pointer items-start gap-3 rounded-lg border border-bordure-forte bg-white p-3.5 shadow-xs transition hover:bg-fond; }
+.choix:has(:checked) { border-color: var(--color-accent); background-color: var(--color-accent-soft); box-shadow: 0 0 0 1px var(--color-accent); }
+.choix:has(:focus-visible) { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.choix input { @apply mt-0.5 h-4 w-4 border-bordure-forte text-accent shadow-none; }
+.choix input:focus { --tw-ring-color: transparent; box-shadow: none; }
+.choix-titre { @apply block text-sm font-semibold text-ink; }
+.choix-description { @apply block text-xs text-tertiaire; }
+
+/* Sélecteur segmenté */
+.segment { @apply inline-flex w-full rounded-lg border border-bordure-forte bg-fond p-1; }
+.segment label { @apply flex-1 cursor-pointer rounded-md px-3 py-1.5 text-center text-sm font-medium text-secondaire transition; }
+.segment label:has(:checked) { background-color: var(--color-surface); color: var(--color-ink); box-shadow: 0 1px 3px rgba(16, 24, 40, 0.1), 0 1px 2px rgba(16, 24, 40, 0.06); }
+.segment label:has(:focus-visible) { outline: 2px solid var(--color-accent); outline-offset: 1px; }
+
+/* Interrupteur */
+.interrupteur-piste { @apply relative inline-flex h-6 w-11 shrink-0 rounded-full transition; background-color: var(--color-border-strong); }
+.interrupteur-piste::after { content: ''; position: absolute; top: 2px; inset-inline-start: 2px; height: 1.25rem; width: 1.25rem; border-radius: 9999px; background-color: #fff; box-shadow: 0 1px 3px rgba(16, 24, 40, 0.2); transition: transform 150ms ease; }
+input:checked + .interrupteur-piste { background-color: var(--color-accent); }
+input:checked + .interrupteur-piste::after { transform: translateX(1.25rem); }
+input:focus-visible + .interrupteur-piste { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+/* Zone de dépôt de fichier */
+.zone-fichier { @apply flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-bordure-forte bg-white px-6 py-8 text-center transition hover:bg-fond; }
+input:focus-visible + .zone-fichier, input:focus-visible + .bouton-secondaire { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+/* Panneau de marque de l'écran de connexion */
+.panneau-marque {
+    background-color: var(--color-accent);
+    background-image:
+        radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.16) 0, transparent 38%),
+        linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+        linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-2) 100%);
+    background-size: auto, 48px 48px, 48px 48px, auto;
+}

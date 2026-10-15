@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="ANEFIP">
+  <defs>
+    <radialGradient id="globe" cx="38%" cy="32%" r="72%">
+      <stop offset="0" stop-color="#C4B3E3"/>
+      <stop offset="0.55" stop-color="#7C58B4"/>
+      <stop offset="1" stop-color="#4B2C85"/>
+    </radialGradient>
+    <clipPath id="disque"><circle cx="50" cy="50" r="46"/></clipPath>
+  </defs>
+  <circle cx="50" cy="50" r="46" fill="url(#globe)"/>
+  <g clip-path="url(#disque)" stroke="#FFFFFF" stroke-width="2.4" fill="none" opacity="0.95">
+    <path d="M28 2V98M50 2V98M72 2V98"/>
+    <path d="M2 28H98M2 50H98M2 72H98"/>
+  </g>
+  <g fill="#14141C" stroke="#14141C" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="50" cy="33" r="4.2" stroke="none"/>
+    <path d="M50 41 C48 50 43 58 36 68 M50 41 C53 52 58 60 64 68" fill="none"/>
+    <circle cx="27" cy="24" r="3.2" stroke="none"/>
+    <path d="M27 30 C25.5 36 22 42 18 48 M27 30 C29 36 32 42 36 48" fill="none" stroke-width="4.2"/>
+    <circle cx="73" cy="24" r="3.2" stroke="none"/>
+    <path d="M73 30 C71.5 36 68 42 64 48 M73 30 C75 36 78 42 82 48" fill="none" stroke-width="4.2"/>
+  </g>
+</svg>

@@ -1,0 +1,12 @@
+# Terminaison HTTPS. APP_DOMAIN et APP_TLS viennent de .env.production.
+#  - APP_TLS = adresse e-mail de contact : certificat Let's Encrypt obtenu et renouvelé
+#    automatiquement (APP_DOMAIN = nom de domaine public ; ports 80 et 443 joignables
+#    depuis internet).
+#  - APP_TLS = internal : certificat d'une autorité locale Caddy, pour un réseau interne
+#    (APP_DOMAIN = nom ou adresse IP du serveur). Les navigateurs affichent un
+#    avertissement tant que le certificat racine n'est pas installé sur les postes.
+{$APP_DOMAIN} {
+	tls {$APP_TLS}
+	encode zstd gzip
+	reverse_proxy web:80
+}
